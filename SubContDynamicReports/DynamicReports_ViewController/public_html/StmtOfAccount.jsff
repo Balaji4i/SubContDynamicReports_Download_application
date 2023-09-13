@@ -1,0 +1,112 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.1"
+          xmlns:af="http://xmlns.oracle.com/adf/faces/rich"
+          xmlns:f="http://java.sun.com/jsf/core">
+  <af:pageTemplate viewId="/oracle/apps/uikit/common/pageTemplates/MainPageTemplate.jspx"
+                   id="pt1">
+    <f:facet name="pageContents">
+      <af:group id="g1">
+        <af:panelStretchLayout id="psl1" startWidth="100%" endWidth="100%" styleClass="AFStretchWidth"
+                               inlineStyle="height:16.0cm;">
+          <f:facet name="center"/>  
+        <f:facet name="start">
+          <af:panelGroupLayout id="pgl3" layout="vertical">
+              <af:panelBox text="FCR Report" id="pb9" disclosed="false"
+                           rendered="false">
+                <f:facet name="toolbar"/>
+                <af:panelFormLayout id="pfl9" maxColumns="1" rows="5"
+                                    fieldWidth="250" labelWidth="200">
+                  <af:inputListOfValues id="projectNameId"
+                                        popupTitle="Search and Select: #{bindings.ProjectName.hints.label}"
+                                        value="#{bindings.ProjectName.inputValue}"
+                                        label="#{bindings.ProjectName.hints.label}"
+                                        model="#{bindings.ProjectName.listOfValuesModel}"
+                                        required="#{bindings.ProjectName.hints.mandatory}"
+                                        columns="#{bindings.ProjectName.hints.displayWidth}"
+                                        shortDesc="#{bindings.ProjectName.hints.tooltip}"
+                                        autoSubmit="true"
+                                        valueChangeListener="#{backingBeanScope.PrismBean.doSlctProjName}">
+                    <f:validator binding="#{bindings.ProjectName.validator}"/>
+                  </af:inputListOfValues>
+                  <af:inputText value="#{bindings.ProjectId_Trans.inputValue}"
+                                label="#{bindings.ProjectId_Trans.hints.label}"
+                                required="#{bindings.ProjectId_Trans.hints.mandatory}"
+                                columns="#{bindings.ProjectId_Trans.hints.displayWidth}"
+                                maximumLength="#{bindings.ProjectId_Trans.hints.precision}"
+                                shortDesc="#{bindings.ProjectId_Trans.hints.tooltip}"
+                                id="it1" partialTriggers="projectNameId"
+                                autoSubmit="true" rendered="false">
+                    <f:validator binding="#{bindings.ProjectId_Trans.validator}"/>
+                  </af:inputText>
+                  <af:inputDate value="#{bindings.FcrDate.inputValue}"
+                                label="#{bindings.FcrDate.hints.label}"
+                                required="#{bindings.FcrDate.hints.mandatory}"
+                                shortDesc="#{bindings.FcrDate.hints.tooltip}"
+                                id="id1" autoSubmit="true"
+                                valueChangeListener="#{backingBeanScope.PrismBean.doEntrFcrDate}"
+                                contentStyle="width:235px;">
+                    <f:validator binding="#{bindings.FcrDate.validator}"/>
+                    <af:convertDateTime pattern="dd-MM-yyyy"/>
+                  </af:inputDate>
+                  <af:menuBar id="mb2">
+                    <af:menu text="Download" id="m2"
+                             disabled="#{bindings.ProjectName.inputValue eq null or bindings.FcrDate.inputValue eq null}"
+                             partialTriggers="projectNameId id1">
+                      <af:commandMenuItem text="Execute" id="cmi1"
+                                          actionListener="#{backingBeanScope.PrismBean.doExecuteFcrReport}"
+                                          disabled="#{pageFlowScope.exeFcr != 'exeFcr'}"
+                                          partialTriggers="id1 projectNameId"
+                                          binding="#{backingBeanScope.PrismBean.cmi1}">
+                        <!--<af:setPropertyListener from="executeRcr" to="#{pageFlowScope.exeFcr}" type="action"/>-->
+                     </af:commandMenuItem>
+                      <af:goMenuItem text="Download" id="gmi2" disabled="#{pageFlowScope.exeFcr == 'exeFcr'}"
+                                     destination="https://omnijcsprod01.omniyat.com/OmniyatFcrReportCall/webresources/fcrservice/fcrReportCall?p_project_id=#{sessionScope.pid}&amp;p_date=#{sessionScope.dates}&amp;P_File_Type=xlsx"
+                                     partialTriggers="cmi1"
+                                     binding="#{backingBeanScope.PrismBean.gmi2}"
+                                     targetFrame="_blank">
+                        <!--<af:setPropertyListener from="downLoadRcr" to="#{pageFlowScope.exeFcr}" type="action"/>-->
+                      </af:goMenuItem>
+                      <!--<af:setPropertyListener from="a" to="a" type="action"/>-->
+                    </af:menu>
+                  </af:menuBar>
+                </af:panelFormLayout>
+              </af:panelBox>
+            <af:spacer width="10" height="10" id="s4"/>
+              <af:panelBox text="Approved PC Report" id="pb1">
+                <f:facet name="toolbar"/>
+                <af:panelFormLayout id="pfl1" maxColumns="1" rows="5"
+                                    labelWidth="250" fieldWidth="200">
+                  <f:facet name="footer"/>
+                  <af:selectOneChoice value="#{bindings.BuName.inputValue}"
+                                      label="Business Unit"
+                                      required="#{bindings.BuName.hints.mandatory}"
+                                      shortDesc="#{bindings.BuName.hints.tooltip}"
+                                      id="soc1" autoSubmit="true"
+                                      contentStyle="width:200.0px;">
+                    <f:selectItems value="#{bindings.BuName.items}" id="si1"/>
+                  </af:selectOneChoice>
+                  <af:inputDate label="Date" id="id2"
+                                contentStyle="width:200.0px;"
+                                autoSubmit="true"
+                                binding="#{backingBeanScope.SubContractReportBb.date1}"/>
+                  <af:selectOneChoice value="#{bindings.ReportPath.inputValue}"
+                                      label="Report Format"
+                                      required="#{bindings.ReportPath.hints.mandatory}"
+                                      shortDesc="#{bindings.ReportPath.hints.tooltip}"
+                                      id="soc2" autoSubmit="true"
+                                      binding="#{backingBeanScope.SubContractReportBb.reportFormat}">
+                    <f:selectItems value="#{bindings.ReportPath.items}"
+                                   id="si2"/>
+                  </af:selectOneChoice>
+                  <af:commandButton text="Download" id="cb1"
+                              actionListener="#{backingBeanScope.SubContractReportBb.onClickDownload}"/>
+                </af:panelFormLayout>
+              </af:panelBox>
+            </af:panelGroupLayout>
+        </f:facet>
+          <f:facet name="end"/>
+        </af:panelStretchLayout>
+      </af:group>
+    </f:facet>
+  </af:pageTemplate>
+</jsp:root>

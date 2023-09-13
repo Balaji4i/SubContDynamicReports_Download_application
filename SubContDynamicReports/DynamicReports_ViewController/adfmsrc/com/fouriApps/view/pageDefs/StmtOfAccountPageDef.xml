@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<pageDefinition xmlns="http://xmlns.oracle.com/adfm/uimodel"
+                version="11.1.1.66.73" id="StmtOfAccountPageDef"
+                Package="com.fouriApps.view.pageDefs">
+  <parameters/>
+  <executables>
+    <variableIterator id="variables"/>
+    <iterator Binds="XXSTG_CUSTOMER_ROVO" RangeSize="25"
+              DataControl="PrismReport_AMDataControl"
+              id="XXSTG_CUSTOMER_ROVOIterator"/>
+    <iterator Binds="xxstgProject_RoVo1" RangeSize="25"
+              DataControl="PrismReport_AMDataControl"
+              id="xxstgProject_RoVo1Iterator"/>
+    <iterator Binds="xxstg_Business_unit1" RangeSize="25"
+              DataControl="DynamicReports_AMDataControl"
+              id="xxstg_Business_unit1Iterator"/>
+  </executables>
+  <bindings>
+    <list IterBinding="XXSTG_CUSTOMER_ROVOIterator" ListOperMode="navigation"
+          ListIter="XXSTG_CUSTOMER_ROVOIterator" id="XXSTG_CUSTOMER_ROVO"
+          DTSupportsMRU="false" SelectItemValueMode="ListObject">
+      <AttrNames>
+        <Item Value="CustomerName"/>
+      </AttrNames>
+    </list>
+    <listOfValues StaticList="false" IterBinding="xxstgProject_RoVo1Iterator"
+                  Uses="LOV_ProjectName" id="ProjectName"/>
+    <attributeValues IterBinding="xxstgProject_RoVo1Iterator" id="FcrDate">
+      <AttrNames>
+        <Item Value="FcrDate"/>
+      </AttrNames>
+    </attributeValues>
+    <list IterBinding="xxstg_Business_unit1Iterator" StaticList="false"
+          Uses="LOV_BuName" id="BuName" DTSupportsMRU="true"
+          SelectItemValueMode="ListObject"/>
+    <list IterBinding="xxstg_Business_unit1Iterator" StaticList="false"
+          Uses="LOV_ReportPath" id="ReportPath" DTSupportsMRU="true"
+          SelectItemValueMode="ListObject"/>
+  </bindings>
+</pageDefinition>
